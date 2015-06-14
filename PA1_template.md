@@ -1,7 +1,8 @@
 # Course5-Reproducible Research-Project1
 
 ## Get libraries such as dplyr, ggplot2
-```{r get_libraries, echo=TRUE, message=FALSE}
+
+```r
 ## set the path for dplyr package
 ## created a summary dataset of sum of steps across days Using dplyr library
 .libPaths( c( .libPaths(), "C:/anand/software/r-analytics/packages") )
@@ -11,14 +12,16 @@ library(ggplot2)
 
 ## The code to get the data from file
 
-```{r get data from file, echo=TRUE}
+
+```r
 activity_data <- read.csv("activity.csv")
 ```
 
 ## assignment 1
 
 ## create the clean data for the plot
-```{r process the raw data to clean data, echo=TRUE}
+
+```r
 ##remove rows with NA values
 activity_data_with_no_missing_val <- activity_data[complete.cases(activity_data),]
 ## create the summary data
@@ -26,7 +29,8 @@ activity_summary_data_no_NA <- summarise_each(group_by(activity_data_with_no_mis
 ```
 
 ## create the histogram plot using base plot for activity data
-```{r plot1, echo=TRUE}
+
+```r
 ## The y axis is frequency of number of steps taken 
 ## The x axis is number of steps of observation
 hist(activity_summary_data_no_NA$steps, 
@@ -34,26 +38,31 @@ col="red",main = "Total steps taken per day \n as captured by activity monitorin
 xlab = "Total number of steps" )
 ```
 
+![plot of chunk plot1](figure/plot1-1.png) 
+
 ## calculate the mean and median of the activity data per day
-```{r get the summary data, echo=TRUE}
+
+```r
 mean_activity_summary_data_no_NA <- mean(activity_summary_data_no_NA$steps)
 median_activity_summary_data_no_NA <- median(activity_summary_data_no_NA$steps)
 ```
-The mean of the total number of steps taken per day `r as.character(mean_activity_summary_data_no_NA)`.
-The median of the total number of steps taken per day `r median_activity_summary_data_no_NA`.
+The mean of the total number of steps taken per day 10766.1886792453.
+The median of the total number of steps taken per day 10765.
 
 
 ## assignment 2
 
 ## create the clean data for the plot
-```{r process the raw data to clean data assignment 2, echo=TRUE}
+
+```r
 ## created a summary dataset of average of steps across time intervals Using dplyr library
 activity_summary_data_no_NA <- summarise_each(group_by(activity_data_with_no_missing_val,interval),funs(mean),c(1))
 ```
 
 ## create the time series plot using base plot for activity data
 
-```{r plot2, echo=TRUE}
+
+```r
 ## This is a line plot where type = l and line color is red
 ## The y axis is mean no of steps taken averaged for all days
 ## The x axis is 5 minute interval of the day
@@ -63,26 +72,31 @@ type="l", col="red",
 ylab = "Average number of steps taken (averaged for all days)",
 xlab = "5-minute interval",
 main ="Average number of steps taken per 5-min interval per day \n as captured by activity monitoring device " )
-```  
+```
+
+![plot of chunk plot2](figure/plot2-1.png) 
 
 ## max of the steps taken across 5-minute interval, averaged across all the days
-```{r get the summary data assignment2, echo=TRUE}
+
+```r
 max_activity_summary_data_no_NA <- max(activity_summary_data_no_NA$steps)
 ```
-The max of the average number of steps taken per day at 5-minute interval `r max_activity_summary_data_no_NA`.
+The max of the average number of steps taken per day at 5-minute interval 206.1698113.
 
 
 ## assignment 3
 
 ## Get the total number of missing data rows
-```{r count missing rows, echo=TRUE}
+
+```r
 missing_no_of_rows <- nrow(activity_data[!complete.cases(activity_data),])
 ```
-The rows with NA (missing values) in dataset is `r missing_no_of_rows`.
+The rows with NA (missing values) in dataset is 2304.
 
 ### I have adopted the strategy : Where the steps value is NA(missing), fill it with the mean value for the same day. But other startegies to fill the missing values can be also adopted. Different strategies can produce the different set of values for missing fields and so the summary data and accordingly the corresponding graphs also will be different.
 
-```{r process data assignment 3, echo=TRUE}
+
+```r
 ##get the summary data steps values are averaged date wise
 ## use the clean data from the assignment 1
 activity_summary_data_no_NA <- summarise_each(group_by(activity_data_with_no_missing_val,date),funs(mean),c(1))
@@ -110,7 +124,8 @@ activity_summary_data_NA_replaced <- summarise_each(group_by(activity_data,date)
 ## create the histogram plot with missing value replaced with daily mean value
 
 
-```{r plot3, echo=TRUE}
+
+```r
 ## The y axis is frequency of total number of steps taken 
 ## The x axis is each day of observation
 hist(activity_summary_data_NA_replaced$steps_NA_replaced, 
@@ -118,13 +133,16 @@ col="red",main = "Total steps taken per day \n as captured by activity monitorin
 xlab = "Total number of steps" )
 ```
 
+![plot of chunk plot3](figure/plot3-1.png) 
+
 ## calculate the mean and median of the activity data per day
-```{r get the summary data assignment 3, echo=TRUE}
+
+```r
 mean_activity_summary_data_NA_replaced <- mean(activity_summary_data_NA_replaced$steps_NA_replaced)
 median_activity_summary_data_NA_replaced <- median(activity_summary_data_NA_replaced$steps_NA_replaced)
 ```
-The mean of the total number of steps taken per day `r as.character(mean_activity_summary_data_NA_replaced)`.
-The median of the total number of steps taken per day `r as.character(median_activity_summary_data_NA_replaced)`.
+The mean of the total number of steps taken per day 10766.1886792453.
+The median of the total number of steps taken per day 10765.
 
 ### In the dataset the data is missing(NA) for whole day's. For e.g. complete Oct 1st 2012 data is missing. With the strategy which I have chosen fo imputing (replace the missing value for a particular day with that day's average value has no effect of imputing. And so the processed data is same as it was without imputing.
 ### The other point: there is no missing value for any 5-min interval in between a day's data so each remaining day (other than day's for which there are no observations,) computed value is same with or without imputing.
@@ -134,7 +152,8 @@ The median of the total number of steps taken per day `r as.character(median_act
 
 
 ## create the clean data for the plot
-```{r process data assignment 4, echo=TRUE}
+
+```r
 ##use the clean data from assignment 1
 ##create a factor column of weekday-weekend type in the dataset
 activity_data_with_no_missing_val$day <- as.factor(ifelse (weekdays(as.Date(activity_data_with_no_missing_val$date)) == "Saturday" | weekdays(as.Date(activity_data_with_no_missing_val$date)) =="Sunday","Weekend","Weekday") )
@@ -145,7 +164,8 @@ activity_summary_data_no_NA <- summarise_each(group_by(activity_data_with_no_mis
 ## create the panel plot.
 ### I have used ggplot2 which results are more visible than base plot.
 
-```{r plot4, echo=TRUE}
+
+```r
 g <- ggplot(activity_summary_data_no_NA, aes(interval, steps))
 g <- g + geom_freqpoly(stat="identity", colour = "red" ) +
      facet_wrap(~day) +
@@ -154,3 +174,5 @@ g <- g + geom_freqpoly(stat="identity", colour = "red" ) +
      labs(title = "Comparison Chart -- Weekend/Weekday average number of steps")
 print(g)
 ```
+
+![plot of chunk plot4](figure/plot4-1.png) 
